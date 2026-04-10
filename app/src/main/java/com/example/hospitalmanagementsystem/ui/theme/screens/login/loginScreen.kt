@@ -16,8 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hospitalmanagementsystem.navigations.ROUTE_LOGIN
 import com.example.hospitalmanagementsystem.navigations.ROUTE_REGISTER
-import com.example.hospitalmanagementsystem.ui.theme.screens.register.RegisterScreen
-
+import com.example.hospitalmanagementsystem.navigations.ROUTE_DASHBOARD
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
@@ -69,7 +68,7 @@ fun LoginScreen(navController: NavHostController) {
 
             Button(
                 onClick = {
-                    // TODO: Handle login logic
+                    navController.navigate(ROUTE_DASHBOARD)
                 },
 
                 modifier = Modifier
@@ -83,10 +82,9 @@ fun LoginScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             TextButton(onClick = {
+                navController.navigate(ROUTE_REGISTER)
             }) {
-                Text("Don't have an account? Register",
-                    modifier = Modifier.clickable{navController.navigate(ROUTE_REGISTER)})
-
+                Text("Don't have an account? Register")
             }
         }
     }

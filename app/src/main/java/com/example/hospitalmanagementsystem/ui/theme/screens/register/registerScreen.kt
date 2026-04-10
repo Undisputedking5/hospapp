@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -35,15 +36,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hospitalmanagementsystem.R
+import com.example.hospitalmanagementsystem.data.AuthViewModel
 import com.example.hospitalmanagementsystem.navigations.ROUTE_LOGIN
+import com.example.hospitalmanagementsystem.navigations.ROUTE_DASHBOARD
 
 @Composable
 fun RegisterScreen(navController: NavController) {
@@ -52,6 +57,10 @@ fun RegisterScreen(navController: NavController) {
     var username by remember { mutableStateOf(value = "") }
     var email by remember { mutableStateOf(value = "") }
     var password by remember { mutableStateOf(value = "") }
+    var confirmPassword by remember { mutableStateOf(value = "") }
+    var phone by remember { mutableStateOf(value = "") }
+    val authViewModel: AuthViewModel = viewModel()
+    val context = LocalContext.current
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.Transparent
@@ -128,6 +137,23 @@ fun RegisterScreen(navController: NavController) {
             )
         )
         OutlinedTextField(
+            value = phone,
+            onValueChange = { phone = it },
+            label = {Text(text = "Enter your phone number") },
+            shape = RoundedCornerShape(15.dp),
+
+            leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
+
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.DarkGray,
+                unfocusedBorderColor = Color.Gray,
+                focusedContainerColor = Color.Black,
+                unfocusedContainerColor = Color.White,
+                focusedLabelColor = Color.DarkGray,
+                unfocusedLabelColor = Color.Gray
+            )
+        )
+        OutlinedTextField(
             value = password,
             onValueChange = { password = it },
             label = { Text(text = "Please enter password") },
@@ -145,8 +171,8 @@ fun RegisterScreen(navController: NavController) {
             )
         )
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
             label = { Text(text = "confirm password") },
             shape = RoundedCornerShape(15.dp),
 
@@ -160,11 +186,28 @@ fun RegisterScreen(navController: NavController) {
                 focusedLabelColor = Color.DarkGray,
                 unfocusedLabelColor = Color.Gray
             )
-
-
         )
 
-        Button(onClick = { }) { Text(text = "register") }
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Button(onClick = {
+            authViewModel.signup(username=username,
+                email=email,
+                password=password,
+                confirmpassword = confirmPassword,
+                phone=phone,
+                navController = navController,
+                context = context)
+            navController.navigate(ROUTE_DASHBOARD)
+        },
+//            modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
+            shape = RoundedCornerShape(15.dp)
+        ) {
+            Text(text = "Register")
+        }
+
+        Spacer(modifier = Modifier.size(16.dp))
+
         Row {
             Text(text = "Already Registered?", color = Color.Magenta)
             Spacer( modifier = Modifier.width(5.dp))
