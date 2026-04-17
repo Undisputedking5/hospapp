@@ -8,7 +8,7 @@ data class PatientModel(
     var illness: String?=null,
     var imageUrl: String?=null,
     var gender: String?=null,
-    var date_of_visit
+    var date_of_visit:String?=null
 )//>This are records from the patient//
 
 

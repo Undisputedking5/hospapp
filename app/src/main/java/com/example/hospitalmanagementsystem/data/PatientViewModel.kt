@@ -4,9 +4,11 @@ package com.example.hospitalmanagementsystem.data
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.hospitalmanagementsystem.models.PatientModel
 import com.example.hospitalmanagementsystem.navigations.ROUTE_DASHBOARD
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +30,7 @@ class PatientViewModel:ViewModel() {
 
     //    capturing patient details//
     fun uploadPatient(
-        imageUri: Uri?, name: String, age: String, phone: String, illness: String,
+        imageUri: Uri?, name: String, age: String, phone: String, illness: String,gender:String,date_of_visit: String,
         context: Context, navController: NavController
     ) {
 
@@ -43,6 +45,8 @@ class PatientViewModel:ViewModel() {
                     "age" to age,
                     "phone" to phone,
                     "illness" to illness,
+                    "gender"  to gender,
+                    "date_of_visit" to date_of_visit,
                     "imageUrl" to imageUrl
                 )
                 ref.setValue(patientData).await()//Save function//
@@ -76,6 +80,25 @@ class PatientViewModel:ViewModel() {
         val secureUrl = Regex("\"secure_url\":\"(.*?)\"")
             .find(responseBody ?: "")?.groupValues?.get(1)
         return secureUrl ?: throw Exception("Failed to get image URL")
+    }
+    private val _patients= mutableStateListOf<PatientModel>()
+    val patient: List<PatientModel> = _patients
+    fun fetchPatient(context: Context){
+
+        val ref = FirebaseDatabase.getInstance().getReference("Patients")
+        ref.get().addOnSuccessListener { snapshot ->
+            _patients.clear()
+            for(child in snapshot.children){
+                val patient= child.getValue(PatientModel::class.java)
+                patient?.let{
+                    it.id= child.key
+                    _patients.add(it)
+
+                }
+            }
+        }.addOnFailureListener {
+            Toast.makeText(context,"Failed to load patients",Toast.LENGTH_LONG).show()
+        }
     }
 
 

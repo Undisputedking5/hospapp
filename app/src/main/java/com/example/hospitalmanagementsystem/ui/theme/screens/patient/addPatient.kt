@@ -1,5 +1,6 @@
 package com.example.hospitalmanagementsystem.ui.theme.screens.patient
 
+import android.app.DatePickerDialog
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,10 +16,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -43,6 +49,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.hospitalmanagementsystem.data.PatientViewModel
 import com.example.hospitalmanagementsystem.navigations.ROUTE_DASHBOARD
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,10 +58,19 @@ fun AddPatientScreen(navController: NavController) {
     var phone by remember { mutableStateOf(value = "") }
     var  age by remember { mutableStateOf(value = "") }
     var  illness by remember { mutableStateOf(value = "") }
+    var gender by remember { mutableStateOf(value = "")}
+    var dateOfVisit by remember { mutableStateOf(value = "") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+
+    var expanded by remember { mutableStateOf(false) }
+    val genderOptions = listOf("Male", "Female", "Other")
+
 
     val patientViewModel: PatientViewModel =viewModel()  //this bring the patientviewmodel to the screen from the PatientViewModel
     val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+
     val launcher = rememberLauncherForActivityResult(
         contract= ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -127,12 +143,64 @@ fun AddPatientScreen(navController: NavController) {
                 label = { Text(text = "Patient Illness") },
                 modifier = Modifier.fillMaxWidth()
             )
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded }
+            ) {
+                OutlinedTextField(
+                    value = gender,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Gender") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor()
+                )
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    genderOptions.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option) },
+                            onClick = {
+                                gender = option
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+            }
+
+            OutlinedTextField(
+                value = dateOfVisit,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Date of Visit") },
+                trailingIcon = {
+                    IconButton(onClick = {
+                        DatePickerDialog(
+                            context,
+                            { _, year, month, day ->
+                                dateOfVisit = "$day/${month + 1}/$year"
+                            },
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH)
+                        ).show()
+                    }) {
+                        Icon(Icons.Default.DateRange, contentDescription = "Pick Date")
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
 
             Spacer(modifier = Modifier.size(20.dp))
 
             Button(
                 onClick = {
-//                    navController.navigate(ROUTE_DASHBOARD)
+                    navController.navigate(ROUTE_DASHBOARD)
                 },
 
                 modifier = Modifier
