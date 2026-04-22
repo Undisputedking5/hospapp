@@ -198,7 +198,7 @@ fun RegisterScreen(navController: NavController) {
                 phone=phone,
                 navController = navController,
                 context = context)
-            navController.navigate(ROUTE_DASHBOARD)
+            navController.navigate(ROUTE_LOGIN)
         },
 //            modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
             shape = RoundedCornerShape(15.dp)

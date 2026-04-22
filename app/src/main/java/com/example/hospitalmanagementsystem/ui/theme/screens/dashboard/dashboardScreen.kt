@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hospitalmanagementsystem.data.AuthViewModel
+import com.example.hospitalmanagementsystem.navigations.ROUTE_ADD_PATIENT
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,7 +133,11 @@ fun DashboardScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(24.dp))
 
             // Action Cards
-            ActionCard("Add Patient", "Register new patient", Icons.Filled.Person)
+            ActionCard(
+                "Add Patient",
+                "Register new patient",
+                Icons.Filled.Person,
+                onClick = {navController.navigate(ROUTE_ADD_PATIENT)})
             ActionCard("Appointments", "Manage bookings", Icons.Filled.DateRange)
             ActionCard("Messages", "Check communications", Icons.Filled.Email)
             ActionCard("Settings", "System preferences", Icons.Filled.Settings)
@@ -180,10 +185,15 @@ fun StatCard(number: String, label: String) {
 }
 
 @Composable
-fun ActionCard(title: String, subtitle: String, icon: androidx.compose.ui.graphics.vector.ImageVector) {
+fun ActionCard(title: String,
+               subtitle: String,
+               icon: androidx.compose.ui.graphics.vector.ImageVector,
+               onClick: () -> Unit = {}
+
+) {
 
     Card(
-        onClick = {},
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),

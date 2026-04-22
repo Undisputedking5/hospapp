@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Theme.HospitalApp.Splash" parent="Theme.SplashScreen">
 
-    <style name="Theme.HospitalManagementSystem" parent="android:Theme.Material.Light.NoActionBar" />
+        <!-- Background (clean medical vibe) -->
+        <item name="windowSplashScreenBackground">@color/splash_bg</item>
+
+        <!-- Your logo -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo</item>
+
+        <!-- Optional: background behind logo -->
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
+
+        <!-- Where app goes after splash -->
+        <item name="postSplashScreenTheme">@style/Theme.HospitalApp</item>
+
+    </style>
 </resources>

@@ -13,7 +13,7 @@ import com.example.tma.ui.theme.screens.dashboard.DashboardScreen
 
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController(),
-               startDestination: String = ROUTE_VIEW_PATIENT){
+               startDestination: String = ROUTE_ADD_PATIENT){
     NavHost(navController = navController,
         startDestination = startDestination) {
         composable(ROUTE_REGISTER){ RegisterScreen(navController) }

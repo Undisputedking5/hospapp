@@ -49,6 +49,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.hospitalmanagementsystem.data.PatientViewModel
 import com.example.hospitalmanagementsystem.navigations.ROUTE_DASHBOARD
+import com.example.hospitalmanagementsystem.navigations.ROUTE_VIEW_PATIENT
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -200,15 +201,38 @@ fun AddPatientScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate(ROUTE_DASHBOARD)
+                    patientViewModel.uploadPatient(
+                        imageUri = imageUri,
+                        name = name,
+                        age = age,
+                        phone = phone,
+                        illness = illness,
+                        gender = gender,
+                        date_of_visit = dateOfVisit,
+                        context = context,
+                        navController = navController
+                    )
                 },
-
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text("Save Patient")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate(ROUTE_VIEW_PATIENT)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("View Patients")
             }
 
 

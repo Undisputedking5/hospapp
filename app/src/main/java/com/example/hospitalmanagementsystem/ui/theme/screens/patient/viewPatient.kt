@@ -3,6 +3,7 @@ package com.example.hospitalmanagementsystem.ui.theme.screens.patient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -45,31 +46,64 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.hospitalmanagementsystem.data.PatientViewModel
 import com.example.hospitalmanagementsystem.models.PatientModel
-import com.example.tma.ui.theme.screens.dashboard.DashboardScreen
 
 
 @Composable
+//fun PatientListScreen(navController: NavController) {
+//    val patientViewModel: PatientViewModel = viewModel()
+//    val patients = patientViewModel.patient
+//    val context = LocalContext.current
+//    LaunchedEffect(Unit) {
+//        patientViewModel.fetchPatient(context)
+//    }
+//
+//    LazyColumn(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(Color.LightGray),
+//        contentPadding = PaddingValues(vertical = 50.dp, horizontal = 12.dp),
+//        verticalArrangement = Arrangement.spacedBy(8.dp)
+//    ) {
+//        items(patients) { patient ->
+//            PatientCard(
+//                patient = patient,
+//                onDelete = { },
+//                navController = navController
+//            )
+//        }
+//    }
+//}
 fun PatientListScreen(navController: NavController) {
     val patientViewModel: PatientViewModel = viewModel()
     val patients = patientViewModel.patient
     val context = LocalContext.current
+
     LaunchedEffect(Unit) {
         patientViewModel.fetchPatient(context)
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.LightGray),
-        contentPadding = PaddingValues(vertical = 50.dp, horizontal = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(patients) { patient ->
-            PatientCard(
-                patient = patient,
-                onDelete = { },
-                navController = navController
-            )
+    if (patients.isEmpty()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("No patients found", color = Color.Gray)
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.LightGray),
+            contentPadding = PaddingValues(vertical = 50.dp, horizontal = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(patients) { patient ->
+                PatientCard(
+                    patient = patient,
+                    onDelete = { },
+                    navController = navController
+                )
+            }
         }
     }
 }
